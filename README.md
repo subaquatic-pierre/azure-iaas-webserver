@@ -25,24 +25,26 @@ All commands are run through Azure CLI (see Dependencies section)
 
 ### Instructions
 
-#### Create service principal for Terraform and Packer [Create service Principal](https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html)
+#### 1. Create service principal for Terraform and Packer [Create service Principal](https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html)
 
-#### Set ARM environment variables
+#### 2. Set ARM environment variables:
 
     $ export ARM_CLIENT_ID="00000000-0000-0000-0000-000000000000"
     $ export ARM_CLIENT_SECRET="00000000-0000-0000-0000-000000000000"
     $ export ARM_SUBSCRIPTION_ID="00000000-0000-0000-0000-000000000000"
     $ export ARM_TENANT_ID="00000000-0000-0000-0000-000000000000"
 
-#### Create resource group to store Packer Image
+#### 3. Create resource group to store Packer Image:
 
     az group create -l eastus -n packer-image-rg
 
-#### Update 'server.json' variables block (optional, if you chose a different name for Packer Image resource group)
+#### 4. Update Packer variables (optional):
+
+If you chose a different name for the resource groups you will need to update the variables in the 'server.json' file.
 
     variables.resource_group = "packer-image-rg"
 
-#### Build packer image
+#### 5. Build packer image
 
     packer build server.json
 
