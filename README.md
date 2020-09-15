@@ -29,6 +29,8 @@ All commands are run through Azure CLI (see Dependencies section)
 
 #### 2. Set ARM environment variables:
 
+It is best to add these variables to your ./bashrc file to persist if the terminal is closed
+
     $ export ARM_CLIENT_ID="00000000-0000-0000-0000-000000000000"
     $ export ARM_CLIENT_SECRET="00000000-0000-0000-0000-000000000000"
     $ export ARM_SUBSCRIPTION_ID="00000000-0000-0000-0000-000000000000"
@@ -37,6 +39,11 @@ All commands are run through Azure CLI (see Dependencies section)
 #### 3. Create resource group to store Packer Image:
 
     az group create -l eastus -n packer-image-rg
+
+| Flag | Meaning                            |
+| ---- | ---------------------------------- |
+| -l   | Your location                      |
+| -n   | Name of the image you are creating |
 
 #### 4. Update Packer variables (optional):
 
@@ -116,4 +123,12 @@ Instance count will be prompted on creation of the resources.
 
 ### Output
 
-**Your words here**
+The following resources are created when running the above commands
+
+- Image resource group
+- Packer managed image
+- Azure Service Principal
+- Virtual Netweok
+- Subnet
+- Network Security Group
+- Security group rules
