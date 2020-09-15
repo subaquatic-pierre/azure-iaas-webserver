@@ -42,13 +42,77 @@ All commands are run through Azure CLI (see Dependencies section)
 
 If you chose a different name for the resource groups you will need to update the variables in the 'server.json' file.
 
-    variables.resource_group = "packer-image-rg"
+```json
+    ...
+    "variables": {
+        ...
+        "resource_group": "packer-image-rg",
+        "image_name": "packer-image"
+        ...
+    },
+    ...
+```
 
 #### 5. Build packer image
 
     packer build server.json
 
-#### Something
+#### 6. Get Image ID
+
+Get the ID for the image you just created, to be used in the Terraform template
+
+    az image show packer-image
+
+#### 7. Edit Terraform variables
+
+Variables in the 'variables.tf' file can be updated to contain all the variables you would like to edit.
+
+The following items should be updated:
+
+- prefix
+- username
+- password
+- location (should match image resource group location)
+- image_id
+
+Instance count will be prompted on creation of the resources.
+
+```hcl
+variable "prefix" {
+  description = "The prefix which should be used for all resources in this example"
+  default     = "YOUR PREFIX"
+}
+
+variable "username" {
+  description = "Enter username to associate with the machine"
+  default     = "YOUR USER NAME"
+
+}
+
+variable "password" {
+  description = "Enter password to use to access the machine"
+  default     = "YOUR PASSWORD"
+
+}
+
+variable "location" {
+  description = "The Azure Region in which all resources in this example should be created."
+  default     = "YOUR LOCATION"
+}
+
+variable "image_id" {
+  description = "Enter the ID for the image which will be used for craeting the Virtual Machines"
+  default     = "YOURIMAGE ID HERE"
+}
+
+...
+
+```
+
+#### 7. Run Terraform
+
+    terraform plan
+    terraform apply
 
 ### Output
 
