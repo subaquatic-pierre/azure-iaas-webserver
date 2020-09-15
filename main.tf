@@ -73,7 +73,7 @@ resource "azurerm_network_security_group" "webserver" {
   }
 }
 
-resource "azurerm_network_security_rule" "internal" {
+resource "azurerm_network_security_rule" "internal-inbound" {
   name                        = "internal-inbound-rule"
   resource_group_name         = "${azurerm_resource_group.main.name}"
   network_security_group_name = "${azurerm_network_security_group.webserver.name}"
@@ -87,7 +87,7 @@ resource "azurerm_network_security_rule" "internal" {
   destination_address_prefix  = "10.0.0.0/16"
 }
 
-resource "azurerm_network_security_rule" "internal" {
+resource "azurerm_network_security_rule" "internal-outbound" {
   name                        = "internal-outbound-rule"
   resource_group_name         = "${azurerm_resource_group.main.name}"
   network_security_group_name = "${azurerm_network_security_group.webserver.name}"
@@ -201,5 +201,5 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data" {
   managed_disk_id    = element(azurerm_managed_disk.data.*.id, count.index)
   lun                = 1
   caching            = "None"
-  count              = var.isntance_count
+  count              = var.instance_count
 }
