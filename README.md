@@ -65,7 +65,7 @@ Get the ID for the image you just created, to be used in the Terraform template
 
 #### 7. Edit Terraform variables
 
-Variables in the 'variables.tf' file can be updated to contain all the variables you would like to edit.
+Edit variables in the 'variables.tf' to reflect your information.
 
 The following items should be updated:
 
@@ -74,8 +74,6 @@ The following items should be updated:
 - password
 - location (should match image resource group location)
 - image_id
-
-Instance count will be prompted on creation of the resources.
 
 ```hcl
 variable "prefix" {
@@ -108,6 +106,8 @@ variable "image_id" {
 ...
 
 ```
+
+Instance count will be prompted on creation of the resources.
 
 #### 7. Run Terraform
 
