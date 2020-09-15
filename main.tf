@@ -37,7 +37,7 @@ resource "azurerm_public_ip" "pip" {
   name                = "${var.prefix}-public-ip"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  allocation_method   = "Static"
+  allocation_method   = "Dynamic"
 
   tags = {
     udacity = "${var.prefix}-project-1"
@@ -67,6 +67,7 @@ resource "azurerm_network_security_group" "webserver" {
   name                = "${var.prefix}-webserver-sg"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
+
   security_rule {
     access                     = "Allow"
     direction                  = "Inbound"
@@ -96,6 +97,48 @@ resource "azurerm_network_security_group" "webserver" {
   }
 }
 
+resource "azurerm_network_security_rule" "internal" {
+  name                        = "internal-inbound-rule"
+  resource_group_name         = "${azurerm_resource_group.main.name}"
+  network_security_group_name = "${azurerm_network_security_group.webserver.name}"
+  priority                    = 101
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "10.0.0.0/16"
+  destination_address_prefix  = "10.0.0.0/16"
+}
+
+resource "azurerm_network_security_rule" "internal" {
+  name                        = "internal-outbound-rule"
+  resource_group_name         = "${azurerm_resource_group.main.name}"
+  network_security_group_name = "${azurerm_network_security_group.webserver.name}"
+  priority                    = 102
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "10.0.0.0/16"
+  destination_address_prefix  = "10.0.0.0/16"
+}
+
+resource "azurerm_network_security_rule" "external" {
+  name                        = "external-rule"
+  resource_group_name         = "${azurerm_resource_group.main.name}"
+  network_security_group_name = "${azurerm_network_security_group.webserver.name}"
+  priority                    = 103
+  direction                   = "Inbound"
+  access                      = "Deny"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+}
+
 // Load balancer
 
 resource "azurerm_lb" "main" {
@@ -111,16 +154,6 @@ resource "azurerm_lb" "main" {
   tags = {
     udacity = "${var.prefix}-project-1"
   }
-}
-
-resource "azurerm_lb_nat_rule" "main" {
-  resource_group_name            = azurerm_resource_group.main.name
-  loadbalancer_id                = azurerm_lb.main.id
-  name                           = "${var.prefix}-https-access"
-  protocol                       = "Tcp"
-  frontend_port                  = 80
-  backend_port                   = 80
-  frontend_ip_configuration_name = azurerm_lb.main.frontend_ip_configuration[0].name
 }
 
 resource "azurerm_lb_backend_address_pool" "main" {
