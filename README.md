@@ -109,8 +109,8 @@ variable "location" {
 }
 
 variable "image_id" {
-  description = "Enter the ID for the image which will be used for craeting the Virtual Machines"
-  default     = "YOURIMAGE ID HERE"
+  description = "Enter the ID for the image which will be used for creating the Virtual Machines"
+  default     = "YOUR IMAGE ID HERE"
 }
 
 ...
