@@ -126,11 +126,17 @@ Instance count will be prompted on creation of the resources.
 
 ### Output
 
-The following resources are created with this template:
+Following the Terraform service principal authentication guidelines creates the following resources:
+
+- Azure Service Principal
+
+Running the Packer commands creates the following resources:
 
 - Image resource group
-- Packer managed image
-- Azure Service Principal
+- Managed virtual machine image
+
+The following resources are created with the Terraform template:
+
 - Resource Group
 - Virtual Network
 - Subnet
