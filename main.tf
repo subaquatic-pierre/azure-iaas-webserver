@@ -68,30 +68,6 @@ resource "azurerm_network_security_group" "webserver" {
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
-  security_rule {
-    access                     = "Allow"
-    direction                  = "Inbound"
-    name                       = "${var.prefix}-allow-internal"
-    priority                   = 100
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    source_address_prefix      = azurerm_subnet.internal.address_prefix
-    destination_port_range     = "*"
-    destination_address_prefix = azurerm_subnet.internal.address_prefix
-  }
-
-  security_rule {
-    access                     = "Deny"
-    direction                  = "Inbound"
-    name                       = "${var.prefix}-block-external"
-    priority                   = 101
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_port_range     = "*"
-    destination_address_prefix = azurerm_subnet.internal.address_prefix
-  }
-
   tags = {
     udacity = "${var.prefix}-project-1"
   }
@@ -203,4 +179,27 @@ resource "azurerm_linux_virtual_machine" "main" {
   tags = {
     udacity = "${var.prefix}-project-1"
   }
+}
+
+resource "azurerm_managed_disk" "data" {
+  count                = var.instance_count
+  name                 = "${var.prefix}-disk-${count.index}"
+  location             = azurerm_resource_group.main.location
+  create_option        = "Empty"
+  disk_size_gb         = 10
+  resource_group_name  = azurerm_resource_group.main.name
+  storage_account_type = "Standard_LRS"
+
+  tags = {
+    udacity = "${var.prefix}-project-1"
+  }
+
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "data" {
+  virtual_machine_id = element(azurerm_linux_virtual_machine.main.*.id, count.index)
+  managed_disk_id    = element(azurerm_managed_disk.data.*.id, count.index)
+  lun                = 1
+  caching            = "None"
+  count              = var.isntance_count
 }
