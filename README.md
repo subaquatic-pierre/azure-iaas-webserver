@@ -2,9 +2,12 @@
 
 ### Introduction
 
-This project contains infrastructure to host a web application on Microsoft Azure. It uses Terraform to manage resources, packer to build an
-image to be used for the virtual machine and create the necessary network resources to route traffic. It includes a private subnet with
-a Network security group to prevent external access to the resources.
+This project contains infrastructure to host a web application on Microsoft Azure. It uses Terraform to manage resources, Packer to build an
+image to be used for the virtual machine and creates the necessary network resources to route traffic.
+
+The template prompts the user for the amount of instances to be created within the Availability set. The virtual machine instance count is spread across the Availability set and load is distributed with the use of a Load Balancer.
+
+The template includes the creation of a Virtual network, subnet and public IP address. It blocks external internet internet traffic with the use of Network Security Groups by default.
 
 Follow the instructions below is setup the environment.
 
@@ -123,12 +126,20 @@ Instance count will be prompted on creation of the resources.
 
 ### Output
 
-The following resources are created when running the above commands
+The following resources are created with this template:
 
 - Image resource group
 - Packer managed image
 - Azure Service Principal
-- Virtual Netweok
+- Resource Group
+- Virtual Network
 - Subnet
 - Network Security Group
 - Security group rules
+- Public IP
+- Load Balancer
+- Backend Address pools
+- Availability Set
+- Network Interface Card(s)
+- Virtual Machine(s)
+- Azure Managed Disk(s)
